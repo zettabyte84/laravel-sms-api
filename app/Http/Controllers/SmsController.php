@@ -18,7 +18,7 @@ class SmsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Send SMS to queue.
      *
      * @return \Illuminate\Http\Response
      */
@@ -34,58 +34,25 @@ class SmsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Consume 1 SMS FIFO
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function consumeOneSms(Request $request)
     {
-        //
+        \Artisan::call('queue:work --once');
+        return true;
     }
 
     /**
-     * Display the specified resource.
+     * Count Job in Queue
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function countJobInQueue()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return \Queue::size();
     }
 }
